@@ -1,0 +1,27 @@
+create procedure CalculateAgeMonthDay
+	@birthDate DATE
+as
+begin
+	DECLARE @ageInYear INT
+	DECLARE @ageInMonths INT
+	DECLARE @ageInDays INT
+	DECLARE @outputString NVARCHAR(100)
+
+	--Calculate
+	select 
+		@ageInYear=datediff(YEAR,@birthDate,GETDATE()),
+		@ageInMonths=datediff(MONTH,DATEADD(YEAR, @ageInYear,@birthDate),GETDATE())-1,
+		@ageInDays=DATEDIFF(DAY,DATEADD(MONTH,@ageInMonths,DATEADD(YEAR,@ageInYear,@birthDate)),GETDATE())-1
+
+	--Output string
+	set @outputString='The person''s age is'
+					  + CAST(@ageInYear as nvarchar(10)) + 'years,'
+					  + CAST(@ageInMonths as nvarchar(10)) + 'months, and'
+					  +CAST(@ageInDays as nvarchar(10)) + 'days old.'
+
+	--Return output string
+	select @outputString as 'Output'
+	end
+
+
+	exec CalculateAgeMonthDay '2000-11-11'

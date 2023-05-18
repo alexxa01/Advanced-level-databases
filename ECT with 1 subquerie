@@ -1,0 +1,8 @@
+with TopSales(SalesPersonID,NumSales) as
+(Select SalesPersonID,count(*)
+from Sales.SalesOrderHeader
+group by SalesPersonID
+)
+select * from TopSales
+where SalesPersonID is not null
+order by NumSales desc

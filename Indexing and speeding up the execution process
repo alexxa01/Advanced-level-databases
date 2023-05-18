@@ -1,0 +1,9 @@
+select * from Prodaja
+where UnitPrice=55 and Quantity between 100 and 130 
+
+create index ix_Kolicina
+on Prodaja
+(Quantity)
+
+alter table Prodaja
+add constraint PK_OrderID primary key(OrderID,ProductID)

@@ -1,0 +1,18 @@
+with Prodaja(SalesPersonID,TotalSales,SalesYear)
+as
+(select SalesPersonID,sum(TotalDue),Year(OrderDate)
+from Sales.SalesOrderHeader
+where SalesPersonID is not null
+group by SalesPersonID,YEAR(OrderDate)
+),
+Prodaja_Quota(BusinessEntityID,Salesquota,SalesQuotaYear)
+as
+(select BusinessEntityID,Sum(SalesQuota),year(QuotaDate)
+from Sales.SalesPersonQuotaHistory
+group by BusinessEntityID,year(QuotaDate)
+)
+select SalesPersonID,SalesYear,TotalSales,SalesQuotaYear,SalesQuota,TotalSales-SalesQuota as Razlika
+from Prodaja 
+inner join Prodaja_Quota on Prodaja_Quota.BusinessEntityID=Prodaja.SalesPersonID
+and Prodaja.SalesYear=Prodaja_Quota.SalesQuotaYear
+order by SalesPersonID,SalesYear
